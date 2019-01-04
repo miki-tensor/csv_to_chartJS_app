@@ -1,5 +1,5 @@
-# miki-tensor-csv_to_chartJS_app
-CSVファイルのアップロードとChartJSによるCSVファイルのグラフ描画までを行います.
+# csv_to_chartJS_app
+CSVファイルのアップロードとChartJSによるCSVファイルのグラフ描画までを行うシンプルなWEBアプリです。
 Name
 csv_to_chartJS_app
 
