@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <div>
+      <form method="POST" action="/deleteFile">
+        <select name="filename" id="filename">
+            <option>ファイルを選択してください</option>
+            <% for(var key in fileList){ %>
+              <option value="<%= fileList[key] %>"><%= fileList[key]%></option>
+            <% } %>
+        </select>
+        <input type="submit"></input>
+      </form>
+      <p><a href="/showFile">アップロード済みファイルを閲覧する</a></p>
+      <p><a href="/uploadFile">ファイルをアップロードする</a></p>
+      <% if(!hidden) { %>
+        <p>ファイルを選択してください。</p>
+      <% } %>
+      <% if(end) { %>
+        <script>
+          alert("ファイルを消去しました。");
+        </script>
+      <% } %>
+  </body>
+</html>

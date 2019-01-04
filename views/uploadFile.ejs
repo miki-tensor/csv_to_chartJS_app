@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <div>
+      <form method="POST" enctype="multipart/form-data" action="/uploadFile">
+      <input type="file" name="fileA"></input>
+      <input type="submit"></input>
+      </form>
+      <p><a href="/showFile">アップロード済みファイルを閲覧する</a></p>
+      <p><a href="/deleteFile">ファイルを消去する</a></p>
+      <% if(!hidden) { %>
+        <p>ファイルを選択してください。</p>
+      <% } %>
+      <% if(end) { %>
+        <script>
+          alert("ファイルをアップロードしました");
+        </script>
+      <% } %>
+    </div>
+  </body>
+</html>

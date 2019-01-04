@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <div>
+      <select name="filename" id="filename">
+        <option>ファイルを選択してください</option>
+        <% for(var key in fileList){ %>
+          <option value="<%= fileList[key] %>"><%= fileList[key]%></option>
+        <% } %>
+      </select>
+      <button id="submit">送信</button>
+      </div>
+      <p><a href="/uploadFile">ファイルをアップロードする</a></p>
+      <p><a href="/deleteFile">ファイルを消去する</a></p>
+      <div id="showChart">
+      </div>
+      
+    <script>
+    // id="submit"のクリックイベント  (グラフデータ取得&描画)
+    $(document).on('click', '#submit', function (){
+      $('#showChart').empty();//以前のグラフ描画を消す
+      $('#showChart').append('<canvas id="ChartField"></canvas>');
+      // ajax通信でサーバからCSVデータを配列として受け取る
+      var ctx = $('#ChartField').get(0).getContext('2d');
+      var requestfile = $('#filename').get(0).value;
+      $.ajax({
+        async: false,
+        url: 'showFile',
+        type: 'post',
+        data:{"filename": requestfile},
+        dataType: 'json'
+      }).done(function(res){
+        // ajax通信終了後chart.jsを使て描画する
+        var csvData = res.csvData[0];
+        var HorizontalAxis=res.horizontalAxis;
+        var datasets = [];
+        var chartData={
+          type: 'line',
+          data: {
+            labels: HorizontalAxis,// エクセル1列目を横軸に設定
+            datasets: []
+          }
+        };
+
+        // chart.jsにエクセルデータを列ごとに描画させるための設定を生成
+        for(var key in csvData){
+          var jsonData = {
+            label: key,
+            data: csvData[key],
+            backgroundColor: random_color(50,256)
+          }
+          chartData.data.datasets.push(jsonData);
+        }
+
+        // chart.jsの描画を実行
+        var ChartField = new Chart(ctx, chartData);
+      }).fail(function(xhr, status, error){
+        console.log(status);
+      });
+    });
+
+    // グラフの描画色をランダムにする関数
+    function random_color (min, max) {
+      var a = Math.floor( Math.random() * (max + 1 - min) ) + min ;
+      var b = Math.floor( Math.random() * (max + 1 - min) ) + min ;
+      var c = Math.floor( Math.random() * (max + 1 - min) ) + min ;
+      var color ="rgba("+ a +","+ b +","+ c + ",0.4" + ")";
+      return color
+    }
+    </script>
+  </body>
+</html>
